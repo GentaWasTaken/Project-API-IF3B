@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Prodi extends Model
 {
     use HasFactory, HasUuids;
+    protected $fillable = ['nama', 'fakultas_id'];
     public function fakultas() {
         return $this->belongsTo(Fakultas::class, 'fakultas_id');
     }

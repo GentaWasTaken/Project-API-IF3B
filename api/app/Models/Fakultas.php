@@ -9,4 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fakultas extends Model
 {
     use HasFactory, HasUuids;
+    protected $fillable = [
+        'nama'
+    ];
 }

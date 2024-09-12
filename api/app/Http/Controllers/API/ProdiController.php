@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ProdiController extends Controller
+class ProdiController extends BaseController
 {
     public function index()
     {
-        $fakultas = Prodi::with('fakultas')->get();
-        $data['message'] = true;
-        $data['result'] = $fakultas;
-        return response()->json($data, Response::HTTP_OK);
+        $prodi = Prodi::with('fakultas')->get();
+        if($prodi) {
+            return $this->sendSuccess($prodi, "Data berhasil ditemukan!", Response::HTTP_OK);
+        } else {
+            return $this->sendError(null, "Data tidak berhasil ditemukan!", Response::HTTP_OK);
+        }
         // if ($fakultas->isEmpty()) {
         //     $response['message'] = 'Tidak ada fakultas yang ditemukan.';
         //     $response['success'] = false;
@@ -27,5 +29,62 @@ class ProdiController extends Controller
         // return response()->json($response, Response::HTTP_OK);
         // atau
         // return response()->json($response, 200);
+    }
+     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validate = $request->validate([
+            'nama' => 'required|unique:prodis',
+            'fakultas_id' => 'required'
+        ]);
+    
+        $fakultas = Prodi::create($validate);
+        if($fakultas){
+            return $this->sendSuccess($fakultas, "Prodi berhasil ditambahkan.", Response::HTTP_CREATED);
+        } else {
+            return $this->sendError(null, "Data sudah ada!", Response::HTTP_OK);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Prodi $fakultas)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Prodi $fakultas)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Prodi $fakultas)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Prodi $fakultas)
+    {
+        //
     }
 }
