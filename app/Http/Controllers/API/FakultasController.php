@@ -38,7 +38,7 @@ class FakultasController extends BaseController
     
         $fakultas = Fakultas::create($validate);
         if($fakultas){
-            return $this->sendSuccess($fakultas, "Fakultas berhasil ditambahkan.", Response::HTTP_CREATED);
+            return $this->sendSuccess($fakultas, "Fakultas berhasil ditambahkan!", Response::HTTP_CREATED);
         } else {
             return $this->sendError(null, "Data sudah ada!", Response::HTTP_OK);
         }
@@ -63,16 +63,29 @@ class FakultasController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Fakultas $fakultas)
+    public function update(Request $request, $id)
     {
-        //
+        $validate = $request->validate([
+            'nama' => 'required'
+        ]);
+    
+        $result = Fakultas::where('id', $id)->update($validate);
+        if($result){
+            return $this->sendSuccess($result, "Fakultas berhasil di update!", Response::HTTP_CREATED);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Fakultas $fakultas)
+    public function destroy($id)
     {
-        //
+        $result = Fakultas::find($id);
+        if($result){
+            $result->delete();
+            return $this->sendSuccess($result, "Fakultas berhasil di hapus!", Response::HTTP_CREATED);
+        } else {
+            return $this->sendError(null, "Data tidak ada!", Response::HTTP_OK);
+        }
     }
 }

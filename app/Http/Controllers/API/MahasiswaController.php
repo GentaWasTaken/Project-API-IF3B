@@ -13,7 +13,7 @@ class MahasiswaController extends BaseController
      */
     public function index()
     {
-        $results = Mahasiswa::with('prodis')->get();
+        $results = Mahasiswa::with('prodi')->get();
         if($results) {
             return $this->sendSuccess($results, "Data berhasil ditemukan!", Response::HTTP_OK);
         } else {
@@ -70,16 +70,31 @@ class MahasiswaController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Mahasiswa $mahasiswa)
+    public function update(Request $request, $id)
     {
-        //
+        $validate = $request->validate([
+            'nama' => 'required'
+        ]);
+    
+        $result = Mahasiswa::where('id', $id)->update($validate);
+        if($result){
+            return $this->sendSuccess($result, "Mahasiswa berhasil di update!", Response::HTTP_CREATED);
+        } else {
+            return $this->sendError(null, "Data tidak ada!", Response::HTTP_OK);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Mahasiswa $mahasiswa)
+    public function destroy($id)
     {
-        //
+        $result = Mahasiswa::find($id);
+        if($result){
+            $result->delete();
+            return $this->sendSuccess($result, "Mahasiswa berhasil di hapus!", Response::HTTP_CREATED);
+        } else {
+            return $this->sendError(null, "Data tidak ada!", Response::HTTP_OK);
+        }
     }
 }
