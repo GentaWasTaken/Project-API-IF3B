@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FakultasController;
 use App\Http\Controllers\API\ProdiController;
 use App\Http\Controllers\API\MahasiswaController;
@@ -10,8 +11,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-Route::get('/fakultas', [FakultasController::class, 'index']);
+Route::middleware('auth:sanctum')->get('fakultas', [FakultasController::class, 'index']);
+// Route::get('/fakultas', [FakultasController::class, 'index']);
 Route::get('/prodi', [ProdiController::class, 'index']);
 Route::get("/mahasiswa", [MahasiswaController::class, "index"]);
 
@@ -29,3 +30,6 @@ Route::patch("/mahasiswa/{mahasiswa}", [MahasiswaController::class, "update"]);
 Route::delete("/fakultas/{fakultas}", [FakultasController::class, "destroy"]);
 Route::delete("/prodi/{prodi}", [ProdiController::class, "destroy"]);
 Route::delete("/mahasiswa/{mahasiswa}", [MahasiswaController::class, "destroy"]);
+
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
